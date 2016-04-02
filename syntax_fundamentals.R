@@ -5,6 +5,10 @@
 # Comments begin with a #
 # Commented lines are not executed and are strictly for humans
 
+# If you're curious about anything, enter ?thing into the console
+# for example, this will display documentation of the max() function
+?max
+
 ##### Math works like you'd expect #####
 
 1 + 2
@@ -44,7 +48,12 @@
 
 # 'Booleans' aka 'logicals' are TRUE and FALSE
 
+# Greater than
 3 > 2
+# TRUE
+
+# Less than or equal to
+4 <= 4
 # TRUE
 
 # Equality is tested with TWO equals signs
@@ -89,6 +98,7 @@ y
 # Variables can be modified after creation
 
 y <- y - x
+y
 # 165
 
 ##### Strings #####
@@ -101,12 +111,14 @@ s2 <- 'world'
 
 # Strings can be joined using paste()
 paste(s1, s2)
+# 'hello world'
 
 # paste() puts one space between strings by default, but you can use other
 # separator characters if you wish, as well as paste together more than just
 # two strings at a time
 
 paste(s1, 'goodbye', s2, sep = '-')
+# 'hello-goodbye-world'
 
 # You can make strings that are numbers, but you can't do math on them
 
@@ -129,6 +141,9 @@ v
 v[3]
 # 78
 
+length(v)
+# 8
+
 # You can test for presence with %in%
 
 5 %in% v
@@ -140,12 +155,21 @@ v + 2
 # 4 7 80 7 12 56 11 6
 
 v < 10
-# TRUE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE
+# TRUE TRUE FALSE TRUE FALSE FALSE TRUE TRUE
 
 # Remember how booleans are equivalent to 1 and 0 ?
 
 sum(v < 10)
 # 5
+
+# The reason the last three examples work is a little confusing, but will help
+# make things make sense later: every string and number is a vector.
+#
+# 3 actually a vector with a length of 1. So is every other number.
+# 3[1] is valid, though pointless. R does not see any fundamental difference
+# between
+# This quirk of the language means any
+
 
 ## Matrix ##
 
@@ -156,6 +180,9 @@ m <- matrix(v, ncol = 2)
 m
 m * 2
 
+# Matricies can also be created row-wise
+m2 <- matrix(v, byrow = TRUE, nrow = 2)
+m2
 # You can access (and write to) matrix elements in much the same way as vectors:
 
 m[2,2] <- 9000
@@ -177,19 +204,22 @@ c('string', 42)
 # mtcars is a built-in data.frame often used as an example.
 mtcars
 
+# str will show the structure of the data given to it
+str(mtcars)
+
 # You can look at it graphically with View()
 View(mtcars)
 
 # head() and tail() will show you the first and last few rows, respectively
 head(mtcars)
 
-# ncol() and nrow() do what you'd expect
-
-ncol(mtcars)
-# 11
+# nrow() and ncol() do what you'd expect
 
 nrow(mtcars)
 # 32
+
+ncol(mtcars)
+# 11
 
 # rownames() and colnames() get the row and column names
 
@@ -208,6 +238,94 @@ mtcars['Valiant', 'mpg']
 # Retrieve an entire row or column, simply leave the other value blank
 mtcars[,'cyl']
 
+# You can also get multiple columns (or rows) by passing in a vector
+mtcars[, c('mpg', 'cyl')]
+
 # summary() will give you a column-wise six-number summary
 summary(mtcars)
 
+##### Functions #####
+
+# Functions are a key component of any program. You've actually used a few in
+# the examples above. For example, sum() is a function that returns the sum of
+# a vector, matrix, or data.frame.
+
+# Functions allow you to reuse code, which is of enormous importance for both
+# reproducibility and your own sanity.
+# Functions take zero or more arguments (aka paratemers, args, or parms), and
+# do something. Often, a function will manipulate its arguments in some way and
+# return a new value.
+
+# This will create a new function called cube that raises its argument
+# to the third power:
+
+cube <- function(x) {
+    x ^ 3
+}
+
+cube(3)
+# 27
+
+# Again, all numbers are vectors, so R is totally fine with:
+
+cube( c(4, 5, 6) )
+# 64 125 216
+
+# Here's an example that takes two arguments, manipulates them,
+# and returns a single value called out. You'll also notice that the inside of
+# two_arg_example() is able to look out and use cube() which is defined above.
+
+# In R, functions will return the last expression to have been evaluated.
+
+two_arg_example <- function(a, b) {
+
+    intermediate1 <- a ^ 0.5 + 3 / 2
+    intermediate2 <- cube(b)
+
+    out <- intermediate1 / intermediate2
+
+    out
+
+}
+
+two_arg_example(42, 5)
+# 0.06384593
+
+##### Function Application #####
+
+# Functions can be applied over a range of arguments.
+# The apply family of functions take some kind of iterable object (vectors,
+# lists, matrices, data.frames, etc) and pass each element to another function.
+# If you have experience with MS Excel or LO Calc, this is similar to 'dragging'
+# a function over a range of cells.
+
+# Our vector from before:
+v
+# 2  5 78  5 10 54  9  4
+max(v)
+# 78
+
+# The following will pass each column in mtcars to max()
+# MARGIN = 1 would apply over rows instead
+
+apply(mtcars, MARGIN = 2, FUN = max)
+# mpg     cyl    disp      hp    drat      wt    qsec      vs      am    gear    carb
+# 33.900   8.000 472.000 335.000   4.930   5.424  22.900   1.000   1.000   5.000   8.000
+
+# Similarly, this will return vectors of the unique values in each column using
+# the built-in function unique() :
+
+apply(mtcars, 2, unique)
+
+# You can create ad hoc functions by using the function keyword
+# but not binding it to a variable name.
+#
+# This, for example, will return the number of unique values in each column:
+
+apply(mtcars, 2, function(x) length(unique(x)))
+# mpg  cyl disp   hp drat   wt qsec   vs   am gear carb
+# 25    3   27   22   22   29   30    2    2    3    6
+
+# apply() passes each column of mtcars into the anonymous function as 'x'.
+# The anonymous function then takes 'x', and passes it to unique(), which itself
+# is the argument to length()
