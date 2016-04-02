@@ -66,6 +66,11 @@
 3 + 7 != 4
 # TRUE
 
+# Negation is performed with a !
+
+!TRUE
+# FALSE
+
 # TRUE and FALSE are equivalent to 1 and 0, respectively
 # This seems a little weird but can be powerful as we'll show later
 
