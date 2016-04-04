@@ -5,8 +5,8 @@
 # Comments begin with a #
 # Commented lines are not executed and are strictly for humans
 
-# If you're curious about anything, enter ?thing into the console
-# for example, this will display documentation of the max() function
+# If you're curious about anything, enter ?thing into the console.
+# For example, this will display documentation of the max() function
 ?max
 
 ##### Math works like you'd expect #####
@@ -36,7 +36,7 @@
 10 ** 3
 # 1000
 
-# modulo is the remainder of division; the modulo operator is %%
+# Modulo is the remainder of division; the modulo operator is %%
 
 10 %% 3
 # 1
@@ -69,6 +69,14 @@
 # Negation is performed with a !
 
 !TRUE
+# FALSE
+
+# Logical statements can be joined with a logical and (&) or a logical or (|)
+
+TRUE | FALSE
+# TRUE
+
+TRUE & TRUE & FALSE
 # FALSE
 
 # TRUE and FALSE are equivalent to 1 and 0, respectively
@@ -322,6 +330,16 @@ apply(mtcars, MARGIN = 2, FUN = max)
 
 apply(mtcars, 2, unique)
 
+# Functions that take more than one parameter can have the additional parameters
+# passed in from apply(). round() takes the number to be rounded and
+# an argument digits, which is then number of decimal places after which the
+# number is rounded.
+
+round(3.14159, digits = 1)
+# 3.1
+
+apply(mtcars, 2, round, digits = 1)
+
 # You can create ad hoc functions by using the function keyword
 # but not binding it to a variable name.
 #
@@ -334,3 +352,29 @@ apply(mtcars, 2, function(x) length(unique(x)))
 # apply() passes each column of mtcars into the anonymous function as 'x'.
 # The anonymous function then takes 'x', and passes it to unique(), which itself
 # is the argument to length()
+
+##### Conditionals & Control Flow #####
+
+# The if-else chain is important in that it allows a program to have
+# different behaviours for different inputs.
+
+# If the 'if' condition evaluates to TRUE, the following block is executed, and
+# the if-else chain exits. Otherwise, the next 'if' conditions are tested in
+# order until one returns TRUE. If no if conditions are TRUE, the code in the
+# 'else' block is executed.
+
+ifelse_demo <- function(a) {
+
+    if (a == 10) {
+        print('Input is equal to ten')
+    } else if (a < 10) {
+        print('Input is less than ten')
+    } else {
+        print('Input is greater than ten')
+    }
+}
+
+ifelse_demo(3)
+ifelse_demo(99)
+ifelse_demo(10)
+
