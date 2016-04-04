@@ -378,3 +378,12 @@ ifelse_demo(3)
 ifelse_demo(99)
 ifelse_demo(10)
 
+##### File Input/Output #####
+
+# Filepaths in R are relative to either the root or
+
+# Reading and writing files is a task of obvious importantance.
+# read.table() will read in a tablular file and return it as a data.frame
+
+
+
