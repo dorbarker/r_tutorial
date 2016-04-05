@@ -182,13 +182,20 @@ v < 10
 sum(v < 10)
 # 5
 
+# Logical operations can be applied to boolean vectors as well
+
+c(TRUE, TRUE, FALSE, TRUE) & c(FALSE, TRUE, TRUE, TRUE)
+# FALSE TRUE FALSE TRUE
+
 # The reason the last three examples work is a little confusing, but will help
 # make things make sense later: every string and number is a vector.
 #
 # 3 actually a vector with a length of 1. So is every other number.
 # 3[1] is valid, though pointless. R does not see any fundamental difference
-# between
-# This quirk of the language means any
+# between individual values and vectors composed of them.
+# This quirk of the language means any operation that works on an single value
+# will work on a vector, and operations that work on two values can be applied
+# to two vectors, as one value is a multiple of the other.
 
 
 ## Matrix ##
@@ -441,3 +448,39 @@ iris_example <- read.csv(iris_url, header = FALSE)
 
 write.csv(iris_example, file = 'Data/iris_example.csv',
           quote = FALSE, row.names = TRUE)
+
+##### Libraries #####
+
+# A major strength of R is the extensive repository of user-written libraries,
+# called the Comprehensive R Archive Network (CRAN). These libraries allow you
+# to add new functionality to your scripts without having to write it yourself.
+#
+# Important note: Users of Debian-derived distros (Debian, Ubuntu, Mint, etc)
+# will need to install r-base-dev or r-recommended to install packages.
+# Windows, OS X, and Fedora-derived distros should be working out-of-the-box.
+#
+# Installing new packages is simple. Here we install the 'ape' phylogenic
+# analysis package from CRAN:
+
+install.packages('ape', repos = 'https://cran.r-project.org')
+
+# Multiple libraries can be installed at once by giving a vector as input:
+
+install.packages(c('ggplot2', 'reshape2'), repos = 'https://cran.r-project.org')
+
+# Installed libraries can be accessed using library().
+#
+# Though library is first called here for demonstration purposes, the generally
+# accepted convention is that library calls should be placed at
+# the top of the script.
+
+# Ape is installed but he dist.gene() function from
+# the ape package is not available yet.
+#
+# d <- dist.gene(sample_data1)
+# Error: could not find function "dist.gene"
+
+library(ape)
+
+# ape's dist.gene() is now available:
+d <- dist.gene(sample_data1)
