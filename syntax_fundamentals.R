@@ -1,6 +1,6 @@
-#################
-#### R Syntax ###
-#################
+##################
+#### R Syntax ####
+##################
 
 # Comments begin with a #
 # Commented lines are not executed and are strictly for humans
@@ -35,6 +35,13 @@
 
 10 ** 3
 # 1000
+
+# Scientific notation can be done by putting an e before the exponent
+1e2
+# 100
+
+1e6 - 1000000
+# 0
 
 # Modulo is the remainder of division; the modulo operator is %%
 
@@ -380,10 +387,57 @@ ifelse_demo(10)
 
 ##### File Input/Output #####
 
-# Filepaths in R are relative to either the root or
+# Filepaths in R can be given as the absolute path (beginning at root),
+# or relative to the current working directory.
+
+# See the current working directory:
+
+getwd()
+
+# Change the current working directory to the directory of this script by
+# modifying the parameter to setwd()
+
+setwd('change/this/path/to/the/directory/containing/syntax_fundamentals.R')
 
 # Reading and writing files is a task of obvious importantance.
 # read.table() will read in a tablular file and return it as a data.frame
 
+# We can use read.table() to read in same of the sample data.
+#
+# Our data file here is comma-separated, so using sep = ',' will split columns
+# on commas. If the file was tab-delimted, we could use sep = '\t' instead.
+#
+# header = TRUE indicates that the first row contains column headers
+#
+# stringsAsFactors = FALSE forces R to interperet strings as charcater vectors,
+# instead of a special categorical data type (factors)
+#
+# row.names = 1 tells R that the first column contains the row names
+
+sample_data1 <- read.table('Data/sample_allelic_data.csv', sep = ',',
+                          header = TRUE, stringsAsFactors = FALSE,
+                          row.names = 1)
+
+# Because working with CSVs is a common task, R provides read.csv(), which is
+# a special convenience wrapper of read.table() which uses several of the above
+# options by default
+
+sample_data2 <- read.csv('Data/sample_allelic_data.csv', row.names = 1)
+
+identical(sample_data1, sample_data2) # identical() shows that both objects are
+# TRUE                                # identical in memory
 
 
+# Another neat feature of R is that it can read data from remote locations just
+# as easily as if it were on your own computer.
+# Here's an example with the famous Fisher's Iris Dataset
+# NB - this is an example only. Like mtcars, iris is baked right into R.
+
+iris_url <- 'https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data'
+iris_example <- read.csv(iris_url, header = FALSE)
+
+# Writing out data.frames as delimited text files uses a very similar syntax as
+# reading them.
+
+write.csv(iris_example, file = 'Data/iris_example.csv',
+          quote = FALSE, row.names = TRUE)
