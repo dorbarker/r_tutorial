@@ -187,7 +187,7 @@ sum(v < 10)
 c(TRUE, TRUE, FALSE, TRUE) & c(FALSE, TRUE, TRUE, TRUE)
 # FALSE TRUE FALSE TRUE
 
-# The reason the last three examples work is a little confusing, but will help
+# The reason the last four examples work is a little confusing, but will help
 # make things make sense later: every string and number is a vector.
 #
 # 3 actually a vector with a length of 1. So is every other number.
@@ -367,6 +367,11 @@ apply(mtcars, 2, function(x) length(unique(x)))
 # The anonymous function then takes 'x', and passes it to unique(), which itself
 # is the argument to length()
 
+# apply() is just one of a family of related functions, including lapply(),
+# sapply(), the dplyr family of functions, and many others.
+# On the Unices (not Windows, essentially), mclapply() allows you to easily
+# implement multiprocessing parallelization in your code.
+
 ##### Conditionals & Control Flow #####
 
 # The if-else chain is important in that it allows a program to have
@@ -391,6 +396,29 @@ ifelse_demo <- function(a) {
 ifelse_demo(3)
 ifelse_demo(99)
 ifelse_demo(10)
+
+# switch() in most common form matches a string argument to a list of
+# alternatives, and then returns the matched value.
+
+# This example function uses switch() to perform different tasks on a vector
+
+switch_demo <- function(value, task) {
+
+    switch(task,
+           'num_unique' = length(unique(value)),
+           'total'      = sum(value),
+           'first'      = value[1],
+           'last'       = value[length(value)]
+           )
+}
+
+# Using our old vector v:
+
+switch_demo(v, 'num_unique')
+# 7
+
+switch_demo(v, 'last')
+# 4
 
 ##### File Input/Output #####
 
@@ -474,7 +502,7 @@ install.packages(c('ggplot2', 'reshape2'), repos = 'https://cran.r-project.org')
 # accepted convention is that library calls should be placed at
 # the top of the script.
 
-# Ape is installed but he dist.gene() function from
+# Ape is installed but the dist.gene() function from
 # the ape package is not available yet.
 #
 # d <- dist.gene(sample_data1)
@@ -484,3 +512,11 @@ library(ape)
 
 # ape's dist.gene() is now available:
 d <- dist.gene(sample_data1)
+
+# Scripts can be imported into other scripts using source().
+# source() works very much like library() but takes a path to another R file
+# and loads its contents.
+
+source('Helpers/wallace-helper.R')
+
+# Functions defined in wallace-helper.R are now available within this script
